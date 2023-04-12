@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8000:80"
+    environment:
+      PYTHONUNBUFFERED: 1
+      WEB_CONCURRENCY: 1
+      FASTAPI_TITLE: Websocket-Server
+      FASTAPI_DESCRIPTION: Websocket-Server
+      FASTAPI_VERSION: 0.0.1
+      FASTAPI_CONTACT_NAME: Jens Haeuser
+      FASTAPI_CONTACT_EMAIL: Jens.haeuser@igmetall.de
+      FASTAPI_ROOT_PATH: /
+    networks:
+      - uplink
+      #- internal
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.websocket.rule=Host(`wahlen.localhost`) && PathPrefix(`/socket.io`)"
+      - "traefik.http.routers.websocket.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.websocket.tls=true"
+      - "traefik.webservice.websocket.entryPoints=wss"
+
+
+networks:
+  uplink:
+    internal: false
+#  internal:
+#    name: jht-compose_internal
+#    internal: true
