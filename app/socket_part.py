@@ -3,7 +3,7 @@ import socketio  # python-socketio==5.8.0
 
 sio = socketio.AsyncServer(
     async_mode='asgi',
-    cors_allowed_origins=['http://localhost:5173']
+    cors_allowed_origins=['http://localhost:5173', 'https://wahlen.localhost']
 )
 
 sio_app = socketio.ASGIApp(
