@@ -1,9 +1,12 @@
 import socketio  # python-socketio==5.8.0
+import os
 
-
+origins_allowed = os.getenv("CORS_ORIGIN", "")
+if "," in origins_allowed:
+    origins_allowed = [x.strip() for x in origins_allowed.split(",")]
 sio = socketio.AsyncServer(
     async_mode='asgi',
-    cors_allowed_origins=['http://localhost:5173', 'https://wahlen.localhost']
+    cors_allowed_origins=origins_allowed
 )
 
 sio_app = socketio.ASGIApp(

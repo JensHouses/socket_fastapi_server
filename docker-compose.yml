@@ -17,21 +17,22 @@ services:
       FASTAPI_CONTACT_NAME: Jens Haeuser
       FASTAPI_CONTACT_EMAIL: Jens.haeuser@igmetall.de
       FASTAPI_ROOT_PATH: /
+      CORS_ORIGIN: ${CORS_ORIGIN:?Please set CORS_ORIGIN in .var!}
     networks:
       - uplink
-      #- internal
+      - internal
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.websocket.rule=Host(`wahlen.localhost`) && PathPrefix(`/socket.io`)"
       - "traefik.http.routers.websocket.tls.certresolver=letsencrypt"
       - "traefik.http.routers.websocket.tls=true"
-      - "traefik.webservice.websocket.entryPoints=wss"
+      - "traefik.webservice.websocket.entryPoints=websecure"
 
 
 networks:
   uplink:
     internal: false
-#  internal:
-#    name: jht-compose_internal
-#    internal: true
+  internal:
+    name: jht-compose_internal
+    internal: true
